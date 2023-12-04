@@ -40,7 +40,8 @@ class FRUIT:
     # Draw a square
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * CELL_SIZE), int(self.pos.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
-        pygame.draw.rect(screen, (126, 166, 114), fruit_rect)
+        #pygame.draw.rect(screen, (126, 166, 114), fruit_rect)
+        screen.blit(apple, fruit_rect)
     
     def randomize(self):
         # Create an arbitrary x and y position
@@ -86,6 +87,7 @@ pygame.init()
 screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CELL_NUMBER_HEIGHT))
 # With this, we fix that the game speed is the same for every computer (does not depend on hardware)
 clock = pygame.time.Clock()
+apple = pygame.image.load('Graphics/apple.png').convert_alpha()
 
 #fruit = FRUIT()
 #snake = SNAKE()
