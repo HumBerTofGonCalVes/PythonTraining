@@ -7,6 +7,17 @@ CELL_NUMBER_WIDTH = 20
 CELL_NUMBER_HEIGHT = 20
 FRAMERATE = 60
 
+class SNAKE:
+    def __init__(self):
+        self.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+        
+    def draw_snake(self):
+        for block in self.body:
+            # Create a rectangle
+            snake_rect = pygame.Rect(int(block.x * CELL_SIZE), int(block.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
+            #Draw the rectangle
+            pygame.draw.rect(screen, (183, 111, 122), snake_rect)
+
 class FRUIT:
     def __init__(self):
         # Create an x and y position
@@ -25,6 +36,7 @@ screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CEL
 clock = pygame.time.Clock()
 
 fruit = FRUIT()
+snake = SNAKE()
 
 #test_surface = pygame.Surface((100,200))
 #test_surface.fill((0,0,255))
@@ -45,7 +57,7 @@ while True:
     # Draw all our elements
     screen.fill((175, 215, 70))
     fruit.draw_fruit()
-    
+    snake.draw_snake()
     #test_rect.right += 1
     #pygame.draw.rect(screen, pygame.Color('red'), test_rect)
     #x_pos -= 1
