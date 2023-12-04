@@ -10,6 +10,7 @@ FRAMERATE = 60
 class SNAKE:
     def __init__(self):
         self.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+        self.direction = Vector2(1, 0)
         
     def draw_snake(self):
         for block in self.body:
@@ -17,6 +18,11 @@ class SNAKE:
             snake_rect = pygame.Rect(int(block.x * CELL_SIZE), int(block.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
             #Draw the rectangle
             pygame.draw.rect(screen, (183, 111, 122), snake_rect)
+    
+    def move_snake(self):
+        body_copy = self.body[:-1]
+        body_copy.insert(0, body_copy[0] + self.direction)
+        self.body = body_copy[:]
 
 class FRUIT:
     def __init__(self):
@@ -44,6 +50,9 @@ snake = SNAKE()
 #test_rect = pygame.Rect(100, 200, 100, 100)   # Rectangle allows me to have a different control than the surface! Less code
 #test_rect = test_surface.get_rect(center = (200, 250))      # Gets the surface and puts a rectangle around it
 
+SCREEN_UPDATE = pygame.USEREVENT        # Timer for our snake (without user interaction)
+pygame.time.set_timer(SCREEN_UPDATE, 150)
+
 while True:
     
     # Search for events
@@ -53,11 +62,23 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    
+        if event.type == SCREEN_UPDATE:
+            snake.move_snake()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                snake.direction = Vector2(0, -1)
+            if event.key == pygame.K_DOWN:
+                snake.direction = Vector2(0, 1)
+            if event.key == pygame.K_RIGHT:
+                snake.direction = Vector2(1, 0)
+            if event.key == pygame.K_LEFT:
+                snake.direction = Vector2(-1, 0)
+
     # Draw all our elements
     screen.fill((175, 215, 70))
     fruit.draw_fruit()
     snake.draw_snake()
+    
     #test_rect.right += 1
     #pygame.draw.rect(screen, pygame.Color('red'), test_rect)
     #x_pos -= 1
