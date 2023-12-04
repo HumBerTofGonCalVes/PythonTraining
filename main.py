@@ -56,6 +56,7 @@ class MAIN:
     def update(self):
         self.snake.move_snake()
         self.check_collision()
+        self.check_fail()
         
     def draw_elements(self):
         self.fruit.draw_fruit()
@@ -67,6 +68,19 @@ class MAIN:
             self.fruit.randomize()
             # Add another block to the snake
             self.snake.add_block()
+            
+    def check_fail(self):
+        # Check if snake is outside the screen
+        if not 0 <= self.snake.body[0].x < CELL_NUMBER_WIDTH or not 0 <= self.snake.body[0].y < CELL_NUMBER_HEIGHT:
+            self.game_over()
+        # Check if snake hits itself
+        for block in self.snake.body[1:]:
+            if block == self.snake.body[0]:
+                self.game_over()
+        
+    def game_over(self):
+        pygame.quit()
+        sys.exit()
 
 pygame.init()
 screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CELL_NUMBER_HEIGHT))
@@ -94,19 +108,20 @@ while True:
         
         # Search for quit event
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            #pygame.quit()
+            #sys.exit()
+            main_game.game_over()
         if event.type == SCREEN_UPDATE:
             #snake.move_snake()
             main_game.update()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and main_game.snake.direction.y != 1:
                 main_game.snake.direction = Vector2(0, -1)
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN and main_game.snake.direction.y != -1:
                 main_game.snake.direction = Vector2(0, 1)
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT and main_game.snake.direction.x != -1:
                 main_game.snake.direction = Vector2(1, 0)
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT and  main_game.snake.direction.y != 1:
                 main_game.snake.direction = Vector2(-1, 0)
 
     # Draw all our elements
