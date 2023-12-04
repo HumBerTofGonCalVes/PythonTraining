@@ -1,14 +1,30 @@
-import pygame, sys
+import pygame, sys, random
+from pygame.math import Vector2
 
 #Fixed variables
-SCREEN_WIDTH = 400
-SCREEN_HEIGHT = 500
+CELL_SIZE= 40
+CELL_NUMBER_WIDTH = 20
+CELL_NUMBER_HEIGHT = 20
 FRAMERATE = 60
 
+class FRUIT:
+    def __init__(self):
+        # Create an x and y position
+        self.x = random.randint(0, CELL_NUMBER_WIDTH-1)
+        self.y = random.randint(0, CELL_NUMBER_HEIGHT-1)
+        self.pos = Vector2(self.x, self.y)
+        
+    # Draw a square
+    def draw_fruit(self):
+        fruit_rect = pygame.Rect(int(self.pos.x * CELL_SIZE), int(self.pos.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
+        pygame.draw.rect(screen, (126, 166, 114), fruit_rect)
+
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CELL_NUMBER_HEIGHT))
 # With this, we fix that the game speed is the same for every computer (does not depend on hardware)
 clock = pygame.time.Clock()
+
+fruit = FRUIT()
 
 #test_surface = pygame.Surface((100,200))
 #test_surface.fill((0,0,255))
@@ -28,6 +44,7 @@ while True:
     
     # Draw all our elements
     screen.fill((175, 215, 70))
+    fruit.draw_fruit()
     
     #test_rect.right += 1
     #pygame.draw.rect(screen, pygame.Color('red'), test_rect)
