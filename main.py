@@ -1,9 +1,10 @@
+import itertools
 import pygame, sys, random
 from pygame.math import Vector2
 
 #Fixed variables
 CELL_SIZE= 40
-CELL_NUMBER_WIDTH = 20
+CELL_NUMBER_WIDTH = 25
 CELL_NUMBER_HEIGHT = 20
 FRAMERATE = 60
 
@@ -122,6 +123,7 @@ class MAIN:
         self.check_fail()
         
     def draw_elements(self):
+        self.draw_grass()
         self.fruit.draw_fruit()
         self.snake.draw_snake()
         
@@ -144,6 +146,14 @@ class MAIN:
     def game_over(self):
         pygame.quit()
         sys.exit()
+        
+    def draw_grass(self):
+        grass_color = (167, 209, 61)
+
+        for row, col in itertools.product(range(CELL_NUMBER_HEIGHT), range(CELL_NUMBER_WIDTH)):
+            if row % 2 == 0 and col % 2 == 0 or row % 2 != 0 and col % 2 != 0:
+                grass_rect = pygame.Rect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+                pygame.draw.rect(screen, grass_color, grass_rect)
 
 pygame.init()
 screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CELL_NUMBER_HEIGHT))
