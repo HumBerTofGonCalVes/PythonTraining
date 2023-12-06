@@ -33,6 +33,9 @@ class SNAKE:
         self.body_br = pygame.image.load('src/files/Graphics/body_br.png').convert_alpha()
         self.body_bl = pygame.image.load('src/files/Graphics/body_bl.png').convert_alpha()
         
+        # Import sound
+        self.crunch_sound = pygame.mixer.Sound('src/files/Sound/crunch.wav')
+        
     def draw_snake(self):  # sourcery skip: low-code-quality
         #for block in self.body:
             # Create a rectangle
@@ -91,19 +94,23 @@ class SNAKE:
     def add_block(self):
         self.new_block = True
 
+    def play_sound_crunch(self):
+        self.crunch_sound.play()
+
 class FRUIT:
     def __init__(self):
         # Create an x and y position
         #self.x = random.randint(0, CELL_NUMBER_WIDTH-1)
         #self.y = random.randint(0, CELL_NUMBER_HEIGHT-1)
         #self.pos = Vector2(self.x, self.y)
+        self.apple = pygame.image.load('src/files/Graphics/apple.png').convert_alpha()
         self.randomize()
         
     # Draw a square
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * CELL_SIZE), int(self.pos.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
         #pygame.draw.rect(screen, (126, 166, 114), fruit_rect)
-        screen.blit(apple, fruit_rect)
+        screen.blit(self.apple, fruit_rect)
     
     def randomize(self):
         # Create an arbitrary x and y position
@@ -134,6 +141,8 @@ class MAIN:
             self.fruit.randomize()
             # Add another block to the snake
             self.snake.add_block()
+            # Play crunch sound
+            self.snake.play_sound_crunch()
             
     def check_fail(self):
         # Check if snake is outside the screen
@@ -162,19 +171,19 @@ class MAIN:
         score_x = int(CELL_SIZE * CELL_NUMBER_WIDTH - 60)
         score_y = int(CELL_SIZE * CELL_NUMBER_HEIGHT - 40)
         score_rect = score_surface.get_rect(center = (score_x, score_y))
-        apple_rect = apple.get_rect(midright=(score_rect.left, score_rect.centery))
+        apple_rect = self.fruit.apple.get_rect(midright=(score_rect.left, score_rect.centery))
         bg_rect = pygame.Rect(apple_rect.left, apple_rect.top, apple_rect.width + score_rect.width + 6,apple_rect.height)
-        
         pygame.draw.rect(screen, (167, 209, 61), bg_rect)
         pygame.draw.rect(screen, (56, 74, 12), bg_rect, 2)  # Designs a frae around it
         screen.blit(score_surface, score_rect)
-        screen.blit(apple, apple_rect)
+        screen.blit(self.fruit.apple, apple_rect)
 
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CELL_NUMBER_HEIGHT))
 # With this, we fix that the game speed is the same for every computer (does not depend on hardware)
 clock = pygame.time.Clock()
-apple = pygame.image.load('src/files/Graphics/apple.png').convert_alpha()
+
 
 #fruit = FRUIT()
 #snake = SNAKE()
