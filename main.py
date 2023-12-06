@@ -2,7 +2,7 @@ import itertools
 import pygame, sys, random
 from pygame.math import Vector2
 
-#Fixed variables
+# Constants
 CELL_SIZE= 40
 CELL_NUMBER_WIDTH = 25
 CELL_NUMBER_HEIGHT = 20
@@ -15,25 +15,25 @@ class SNAKE:
         self.new_block = False
         
         # Import snake images
-        self.head_up = pygame.image.load('Graphics/head_up.png').convert_alpha()
-        self.head_down = pygame.image.load('Graphics/head_down.png').convert_alpha()
-        self.head_right = pygame.image.load('Graphics/head_right.png').convert_alpha()
-        self.head_left = pygame.image.load('Graphics/head_left.png').convert_alpha()
+        self.head_up = pygame.image.load('src/files/Graphics/head_up.png').convert_alpha()
+        self.head_down = pygame.image.load('src/files/Graphics/head_down.png').convert_alpha()
+        self.head_right = pygame.image.load('src/files/Graphics/head_right.png').convert_alpha()
+        self.head_left = pygame.image.load('src/files/Graphics/head_left.png').convert_alpha()
         
-        self.tail_up = pygame.image.load('Graphics/tail_up.png').convert_alpha()
-        self.tail_down = pygame.image.load('Graphics/tail_down.png').convert_alpha()
-        self.tail_right = pygame.image.load('Graphics/tail_right.png').convert_alpha()
-        self.tail_left = pygame.image.load('Graphics/tail_left.png').convert_alpha()
+        self.tail_up = pygame.image.load('src/files/Graphics/tail_up.png').convert_alpha()
+        self.tail_down = pygame.image.load('src/files/Graphics/tail_down.png').convert_alpha()
+        self.tail_right = pygame.image.load('src/files/Graphics/tail_right.png').convert_alpha()
+        self.tail_left = pygame.image.load('src/files/Graphics/tail_left.png').convert_alpha()
         
-        self.body_vertical = pygame.image.load('Graphics/body_vertical.png').convert_alpha()
-        self.body_horizontal = pygame.image.load('Graphics/body_horizontal.png').convert_alpha()
+        self.body_vertical = pygame.image.load('src/files/Graphics/body_vertical.png').convert_alpha()
+        self.body_horizontal = pygame.image.load('src/files/Graphics/body_horizontal.png').convert_alpha()
         
-        self.body_tr = pygame.image.load('Graphics/body_tr.png').convert_alpha()
-        self.body_tl = pygame.image.load('Graphics/body_tl.png').convert_alpha()
-        self.body_br = pygame.image.load('Graphics/body_br.png').convert_alpha()
-        self.body_bl = pygame.image.load('Graphics/body_bl.png').convert_alpha()
+        self.body_tr = pygame.image.load('src/files/Graphics/body_tr.png').convert_alpha()
+        self.body_tl = pygame.image.load('src/files/Graphics/body_tl.png').convert_alpha()
+        self.body_br = pygame.image.load('src/files/Graphics/body_br.png').convert_alpha()
+        self.body_bl = pygame.image.load('src/files/Graphics/body_bl.png').convert_alpha()
         
-    def draw_snake(self):  # sourcery skip: merge-else-if-into-elif
+    def draw_snake(self):  # sourcery skip: low-code-quality
         #for block in self.body:
             # Create a rectangle
             #snake_rect = pygame.Rect(int(block.x * CELL_SIZE), int(block.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
@@ -41,7 +41,7 @@ class SNAKE:
             #pygame.draw.rect(screen, (183, 111, 122), snake_rect)
         self.update_head_graphics()
         self.update_tail_graphics()
-        
+
         for index, block in enumerate(self.body):
             # Rect for the positioning
             snake_rect = pygame.Rect(int(block.x * CELL_SIZE), int(block.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
@@ -57,15 +57,14 @@ class SNAKE:
                     screen.blit(self.body_vertical, snake_rect)
                 elif previous_block.y == next_block.y:
                     screen.blit(self.body_horizontal, snake_rect)
-                else:
-                    if previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
-                        screen.blit(self.body_tl, snake_rect)
-                    elif previous_block.x == -1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == -1:
-                        screen.blit(self.body_bl, snake_rect)
-                    elif previous_block.x == 1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == 1:
-                        screen.blit(self.body_tr, snake_rect)
-                    elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
-                        screen.blit(self.body_br, snake_rect)
+                elif previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
+                    screen.blit(self.body_tl, snake_rect)
+                elif previous_block.x == -1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == -1:
+                    screen.blit(self.body_bl, snake_rect)
+                elif previous_block.x == 1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == 1:
+                    screen.blit(self.body_tr, snake_rect)
+                elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
+                    screen.blit(self.body_br, snake_rect)
             #else:
                 #pygame.draw.rect(screen, (150, 100, 100), snake_rect)
     
@@ -116,6 +115,7 @@ class MAIN:
     def __init__(self):
         self.snake = SNAKE()
         self.fruit = FRUIT()
+        self.game_font = pygame.font.Font('src/files/Font/PoetsenOne-Regular.ttf', 25)
     
     def update(self):
         self.snake.move_snake()
@@ -126,6 +126,7 @@ class MAIN:
         self.draw_grass()
         self.fruit.draw_fruit()
         self.snake.draw_snake()
+        self.draw_score()
         
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]:
@@ -154,12 +155,26 @@ class MAIN:
             if row % 2 == 0 and col % 2 == 0 or row % 2 != 0 and col % 2 != 0:
                 grass_rect = pygame.Rect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 pygame.draw.rect(screen, grass_color, grass_rect)
+    
+    def draw_score(self):
+        score_text = str(len(self.snake.body) - 3)
+        score_surface = self.game_font.render(score_text, True, (56, 74, 12))
+        score_x = int(CELL_SIZE * CELL_NUMBER_WIDTH - 60)
+        score_y = int(CELL_SIZE * CELL_NUMBER_HEIGHT - 40)
+        score_rect = score_surface.get_rect(center = (score_x, score_y))
+        apple_rect = apple.get_rect(midright=(score_rect.left, score_rect.centery))
+        bg_rect = pygame.Rect(apple_rect.left, apple_rect.top, apple_rect.width + score_rect.width + 6,apple_rect.height)
+        
+        pygame.draw.rect(screen, (167, 209, 61), bg_rect)
+        pygame.draw.rect(screen, (56, 74, 12), bg_rect, 2)  # Designs a frae around it
+        screen.blit(score_surface, score_rect)
+        screen.blit(apple, apple_rect)
 
 pygame.init()
 screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CELL_NUMBER_HEIGHT))
 # With this, we fix that the game speed is the same for every computer (does not depend on hardware)
 clock = pygame.time.Clock()
-apple = pygame.image.load('Graphics/apple.png').convert_alpha()
+apple = pygame.image.load('src/files/Graphics/apple.png').convert_alpha()
 
 #fruit = FRUIT()
 #snake = SNAKE()
