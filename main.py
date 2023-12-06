@@ -11,7 +11,7 @@ FRAMERATE = 60
 class SNAKE:
     def __init__(self):
         self.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
-        self.direction = Vector2(1, 0)
+        self.direction = Vector2(0, 0)
         self.new_block = False
         
         # Import snake images
@@ -97,6 +97,10 @@ class SNAKE:
     def play_sound_crunch(self):
         self.crunch_sound.play()
 
+    def reset(self):
+        self.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+        self.direction = Vector2(0, 0)
+
 class FRUIT:
     def __init__(self):
         # Create an x and y position
@@ -144,6 +148,10 @@ class MAIN:
             # Play crunch sound
             self.snake.play_sound_crunch()
             
+        for block in self.snake.body[1:]:
+            if block == self.fruit.pos:
+                self.fruit.randomize()
+            
     def check_fail(self):
         # Check if snake is outside the screen
         if not 0 <= self.snake.body[0].x < CELL_NUMBER_WIDTH or not 0 <= self.snake.body[0].y < CELL_NUMBER_HEIGHT:
@@ -154,8 +162,9 @@ class MAIN:
                 self.game_over()
         
     def game_over(self):
-        pygame.quit()
-        sys.exit()
+        #pygame.quit()
+        #sys.exit()
+        self.snake.reset()
         
     def draw_grass(self):
         grass_color = (167, 209, 61)
