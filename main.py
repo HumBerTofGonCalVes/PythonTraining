@@ -37,11 +37,6 @@ class SNAKE:
         self.crunch_sound = pygame.mixer.Sound('src/files/Sound/crunch.wav')
         
     def draw_snake(self):  # sourcery skip: low-code-quality
-        #for block in self.body:
-            # Create a rectangle
-            #snake_rect = pygame.Rect(int(block.x * CELL_SIZE), int(block.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
-            #Draw the rectangle
-            #pygame.draw.rect(screen, (183, 111, 122), snake_rect)
         self.update_head_graphics()
         self.update_tail_graphics()
 
@@ -68,8 +63,6 @@ class SNAKE:
                     screen.blit(self.body_tr, snake_rect)
                 elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
                     screen.blit(self.body_br, snake_rect)
-            #else:
-                #pygame.draw.rect(screen, (150, 100, 100), snake_rect)
     
     def update_head_graphics(self):
         head_relation = self.body[1] - self.body[0]
@@ -103,17 +96,12 @@ class SNAKE:
 
 class FRUIT:
     def __init__(self):
-        # Create an x and y position
-        #self.x = random.randint(0, CELL_NUMBER_WIDTH-1)
-        #self.y = random.randint(0, CELL_NUMBER_HEIGHT-1)
-        #self.pos = Vector2(self.x, self.y)
         self.apple = pygame.image.load('src/files/Graphics/apple.png').convert_alpha()
         self.randomize()
         
     # Draw a square
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * CELL_SIZE), int(self.pos.y * CELL_SIZE), CELL_SIZE, CELL_SIZE)
-        #pygame.draw.rect(screen, (126, 166, 114), fruit_rect)
         screen.blit(self.apple, fruit_rect)
     
     def randomize(self):
@@ -162,13 +150,10 @@ class MAIN:
                 self.game_over()
         
     def game_over(self):
-        #pygame.quit()
-        #sys.exit()
         self.snake.reset()
         
     def draw_grass(self):
         grass_color = (167, 209, 61)
-
         for row, col in itertools.product(range(CELL_NUMBER_HEIGHT), range(CELL_NUMBER_WIDTH)):
             if row % 2 == 0 and col % 2 == 0 or row % 2 != 0 and col % 2 != 0:
                 grass_rect = pygame.Rect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
@@ -193,16 +178,6 @@ screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER_WIDTH, CELL_SIZE * CEL
 # With this, we fix that the game speed is the same for every computer (does not depend on hardware)
 clock = pygame.time.Clock()
 
-
-#fruit = FRUIT()
-#snake = SNAKE()
-
-#test_surface = pygame.Surface((100,200))
-#test_surface.fill((0,0,255))
-#x_pos = 200
-#test_rect = pygame.Rect(100, 200, 100, 100)   # Rectangle allows me to have a different control than the surface! Less code
-#test_rect = test_surface.get_rect(center = (200, 250))      # Gets the surface and puts a rectangle around it
-
 SCREEN_UPDATE = pygame.USEREVENT        # Timer for our snake (without user interaction)
 pygame.time.set_timer(SCREEN_UPDATE, 150)
 
@@ -212,7 +187,6 @@ while True:
     
     # Search for events
     for event in pygame.event.get():
-        
         # Search for quit event
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -229,17 +203,8 @@ while True:
                 main_game.snake.direction = Vector2(1, 0)
             if event.key == pygame.K_LEFT and  main_game.snake.direction.x != 1:
                 main_game.snake.direction = Vector2(-1, 0)
-
     # Draw all our elements
     screen.fill((175, 215, 70))
-    #fruit.draw_fruit()
-    #snake.draw_snake()
-    
-    #test_rect.right += 1
-    #pygame.draw.rect(screen, pygame.Color('red'), test_rect)
-    #x_pos -= 1
-    #screen.blit(test_surface, (x_pos, 250))
-    #screen.blit(test_surface, test_rect)   # blit -> block image transfer      //      position is in the top left corner of the surface
     
     main_game.draw_elements()
     pygame.display.update()
