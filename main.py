@@ -215,9 +215,8 @@ while True:
         
         # Search for quit event
         if event.type == pygame.QUIT:
-            #pygame.quit()
-            #sys.exit()
-            main_game.game_over()
+            pygame.quit()
+            sys.exit()
         if event.type == SCREEN_UPDATE:
             #snake.move_snake()
             main_game.update()
