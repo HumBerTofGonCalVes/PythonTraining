@@ -32,7 +32,7 @@ class SNAKE:
         self.body_tl = pygame.image.load('src/files/Graphics/body_tl.png').convert_alpha()
         self.body_br = pygame.image.load('src/files/Graphics/body_br.png').convert_alpha()
         self.body_bl = pygame.image.load('src/files/Graphics/body_bl.png').convert_alpha()
-        
+
         # Import sound
         self.crunch_sound = pygame.mixer.Sound('src/files/Sound/crunch.wav')
         
